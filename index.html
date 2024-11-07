@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=, initial-scale=1.0">
+  <title>サンドウィッチを作ろう</title>
+</head>
+<body>
+  <main>
+  <h1>サンドウィッチを作るよ！</h1>
+  <p>クリックしてサンドウィッチを作ってみよう</p>
+  <button id="showMaterial">つくる</button>
+  <div id="materialContainer"></div>
+
+  <p class="sandwich_result">どんなサンドウィッチができたかな？みんなに教えてみよう！</p>
+</main>
+  <style>
+    main {
+      text-align: center;
+    }
+    #materialContainer {
+      margin-top: 20px;
+    }
+    .sandwich_result {
+      display: none;
+    }
+    .sandwich_result.on {
+      display: block;
+    }
+  </style>
+
+  <script>
+    "use strict"; //厳格モード
+    const sandwich = new Promise((resolve, reject)=> {
+    const material =["🍞","🥚", "🥬", "🍅","🍞","🥑","🫑","🧀","🥓"];
+    resolve(material);
+});
+    document.getElementById("showMaterial").addEventListener("click",() => {
+    sandwich.then((material)=>{
+      const fixedBread = "🍞";
+      const remainingMaterials = material.filter(item => item !== "🍞");//材料からパンを除く
+      
+      const randomMaterials = remainingMaterials
+      .sort(() => 0.5 - Math.random())
+      .slice(0,3);//ランダムに選んだうえで３つを選択
+      
+      const sandwichContent = [fixedBread, ...randomMaterials, fixedBread];
+
+    //材料をコンテナの中に入れる
+    const container = document.getElementById("materialContainer");
+    container.innerHTML = sandwichContent.join("");
+
+    //サンドウィッチができたらテキストを表示させる
+    const resultText = document.querySelector(".sandwich_result");
+    resultText.classList.add("on");
+    
+  }).catch((error) =>{
+    console.error("調理に失敗しました:",error);
+  });
+});
+  </script>
+</body>
+</html>
